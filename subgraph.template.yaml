@@ -1,0 +1,82 @@
+specVersion: 0.0.6
+description: InsiderProtocol subgraph v1
+repository: https://github.com/InsiderProtocol/subgraph
+features:
+  - ipfsOnEthereumContracts
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Court
+    network: {{NETWORK}}
+    source:
+      address: '{{CONTRACT_COURT_ADDRESS}}'
+      abi: Court
+      startBlock: {{CONTRACT_COURT_START_BLOCK}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Court
+        - Stake
+        - Vote
+      abis:
+        - name: Court
+          file: ./abis/Court.json
+      eventHandlers:
+        - event: CourtCreated(uint256,address,address,uint256,uint256,uint256,uint256,string,uint256)
+          handler: handleCourtCreated
+        - event: Staked(uint256,uint256,address)
+          handler: handleStaked
+        - event: GuardianVoted(uint256,uint8,address)
+          handler: handleGuardianVoted
+        - event: InsiderVoted(uint256,uint8,address)
+          handler: handleInsiderVoted
+      file: ./src/mappings/Court.ts
+
+  - kind: ethereum/contract
+    name: Insider
+    network: {{NETWORK}}
+    source:
+      address: '{{CONTRACT_INSIDER_ADDRESS}}'
+      abi: Insider
+      startBlock: {{CONTRACT_INSIDER_START_BLOCK}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Insider
+      abis:
+        - name: Insider
+          file: ./abis/Insider.json
+      eventHandlers:
+        - event: RoomCreated(uint256,uint256,address)
+          handler: handleRoomCreated
+      file: ./src/mappings/Insider.ts
+
+  - kind: ethereum/contract
+    name: Soulbound
+    network: {{NETWORK}}
+    source:
+      address: '{{CONTRACT_SOULBOUND_ADDRESS}}'
+      abi: Soulbound
+      startBlock: {{CONTRACT_SOULBOUND_START_BLOCK}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Soulbound
+      abis:
+        - name: Soulbound
+          file: ./abis/Soulbound.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappings/Soulbound.ts      
+
+
+
+  

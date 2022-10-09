@@ -1,0 +1,31 @@
+{
+  "name": "insideraprotocol-subgraph",
+  "version": "1.0.0",
+  "scripts": {
+    "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",
+    "create": "graph create insideraprotocol/subgraph --node https://api.thegraph.com/deploy/",
+    "create-local": "graph create insideraprotocol/subgraph --node http://127.0.0.1:8020",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy insideraprotocol/subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "windeploy": "graph.cmd deploy --studio subgraph",
+    "deploy-lagecy": "graph.cmd deploy --product hosted-service insider/insiderv1",
+    "deploy-local": "graph deploy insideraprotocol/subgraph --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "watch-local": "graph deploy insideraprotocol/subgraph --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001",
+    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml",
+    "deploy:mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ insideraprotocol/subgraph",
+    "build-deploy:mumbai": "npm run prepare:matic; npm run codegen; npm run build; npm run deploy:matic; rm subgraph.yaml"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.29.0",
+    "@graphprotocol/graph-ts": "^0.26.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-register": "^6.26.0",
+    "mustache": "^4.2.0",
+    "truffle": "^5.0.4",
+    "truffle-contract": "^4.0.5",
+    "truffle-hdwallet-provider": "^1.0.4"
+  }
+}

@@ -1,0 +1,127 @@
+type Counter @entity {
+  id: ID!
+  stakes: BigInt!
+  votes: BigInt!
+}
+
+type Insider @entity {
+  id: ID!
+
+  region: BigInt!
+  methods: BigInt!
+
+  courts: [InsiderCourt!] @derivedFrom(field: "insider")
+
+  courtsCount: BigInt!
+  score: BigInt!
+
+
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Guardian @entity {
+  id: ID!
+
+  region: BigInt!
+  methods: BigInt!
+
+  courts: [Stake!] @derivedFrom(field: "guardian")
+
+  courtsCount: BigInt!
+  score: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Court @entity {
+  id: ID!
+  address1: String!
+  address2: String!
+  region: BigInt!
+  method: BigInt!
+  coinPrice: BigInt!
+  address1VoteCount: BigInt!
+  address2VoteCount: BigInt!
+  duration: BigInt!
+  createdAt: BigInt!
+  status: BigInt!
+  ipfsData: String!
+
+  insider: [InsiderCourt!] @derivedFrom(field: "court")
+  votes: [Vote!] @derivedFrom(field: "court") 
+  stakes: [Stake!] @derivedFrom(field: "court") 
+
+  updatedAt: BigInt!
+}
+
+type Vote @entity {
+  id: ID!
+
+  court: Court!
+  insider: Insider!
+  guardian: Guardian!
+
+  status: BigInt! #status=1 -> guardian status=2->insider
+  vote: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Stake @entity {
+  id: ID!
+
+  court: Court!
+  guardian: Guardian!
+
+  amount: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type InsiderCourt @entity {
+  id: ID!
+
+  court: Court!
+  insider: Insider!
+
+  amount: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Soulbound @entity {
+  id: ID!
+
+  owner: Owner!
+  type: String!
+  court: Court!
+  status: BigInt!
+
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+
+type Owner @entity {
+  id: ID!
+  trees: [Soulbound!] @derivedFrom(field: "owner")
+  soulboundCount: BigInt!
+  soulboundCountWon: BigInt!
+  soulboundCountLoose: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+type Room @entity {
+  id: ID!
+  method: BigInt!
+  insider: Insider!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
